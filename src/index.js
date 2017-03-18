@@ -11,6 +11,8 @@ import  { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import rootReducer from './reducers/rootReducer';
+// Styles
+import { injectGlobal } from 'styled-components';
 // import routes from './routes';
 // Local Storage
 // import { loadState, saveState } from './utils/localStorage';
@@ -23,6 +25,23 @@ import App from './components/pages/App';
 // http://stackoverflow.com/a/34015469/988941
 //----------------------------------------------------------------------------
 injectTapEventPlugin();
+
+//----------------------------------------------------------------------------
+// Global Styles
+//----------------------------------------------------------------------------
+injectGlobal`
+    @import url('https://fonts.googleapis.com/css?family=Roboto');
+    html {
+        font-family: 'Roboto', 'Helvetica', sans-serif;
+        height: 100vh;
+    }
+
+    body, #root {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+    }
+`;
 
 //----------------------------------------------------------------------------
 // Load in cached data from localStorage
