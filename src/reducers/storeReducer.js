@@ -9,7 +9,8 @@ const storeReducer = (state=[], action) => {
                     imgUrl: action.imgUrl,
                     itemPrice: action.itemPrice,
                     onSale: action.onSale,
-                    itemSalePercent: action.itemSalePercent
+                    itemSalePercent: action.itemSalePercent,
+                    itemType: action.itemType
                 },
                 ...state
             ];
@@ -31,10 +32,25 @@ const storeReducer = (state=[], action) => {
                     imgUrl: action.imgUrl,
                     itemPrice: action.itemPrice,
                     onSale: action.onSale,
-                    itemSalePercent: action.itemSalePercent
+                    itemSalePercent: action.itemSalePercent,
+                    itemType: action.itemType
                 },
                 ...oldState
             ];
+        }
+        case 'RECEIVE_UPDATED_STORE': {
+            return action.items.map((item) => {
+                return {
+                    itemId: item.id,
+                    imgUrl: item.image,
+                    onSale: item.isOnSale,
+                    itemName: item.name,
+                    itemSalePercent: item.percentOff,
+                    itemPrice: item.price,
+                    itemQuantity: item.quantity,
+                    itemType: item.type
+                };
+            });
         }
         default:
             return state;

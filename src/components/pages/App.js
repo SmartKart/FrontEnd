@@ -23,7 +23,8 @@ const Content = styled.div`
     -moz-flex-grow: 1;
     -ms-flex-positive: 1;
     flex-grow: 1;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     z-index: 1;
 `;
 

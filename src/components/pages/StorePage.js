@@ -13,10 +13,13 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
 import Toggle from 'material-ui/Toggle';
-import { addStoreItem } from '../../actions/storeActions';
+import { addNewItemToStore, getAllStoreItems } from '../../actions/storeActions';
 
 const PageWrapper = styled.div`
     padding: 0 2rem;
+    text-align: center;
+    overflow-y: scroll;
+    padding-bottom: 40px;
 `;
 
 const PageTitle = styled.h1`
@@ -65,12 +68,15 @@ class StorePage extends Component {
             id: null,
             quantity: null,
             price: null,
-            onSale: false
+            onSale: false,
+            type: ''
         };
         this.toggleModal = this.toggleModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.handleRefresh = this.handleRefresh.bind(this);
     }
 
     toggleModal() {
@@ -105,6 +111,12 @@ class StorePage extends Component {
                 });
                 break;
             }
+            case 'type' :{
+                this.setState({
+                    type: e.target.value
+                });
+                break;
+            }
             case 'quantity': {
                 this.setState({
                     quantity: e.target.value
@@ -134,25 +146,27 @@ class StorePage extends Component {
         }
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
-        const { onSubmit } = this.props;
-        const { name, id, quantity, url, price, onSale, salePercent } = this.state;
-        onSubmit(name, id, quantity, url, price, onSale, salePercent);
+    handleSelectChange(e, i, value) {
+        console.log('select');
         this.setState({
-            isOpen: false,
-            price: null,
-            salePercent: null,
-            name: '',
-            id: null,
-            quantity: null,
-            url: '',
-            onSale: false
+            type: value
         });
     }
 
+    handleSubmit(e) {
+        e.preventDefault();
+        const { onSubmit } = this.props;
+        const { name, id, quantity, url, price, onSale, salePercent, type } = this.state;
+        onSubmit(name, id, quantity, url, price, onSale, salePercent, type);
+    }
+
+    handleRefresh() {
+        const { onRefresh } = this.props;
+        onRefresh();
+    }
+
     render() {
-        const { isOpen, name, id, quantity, price, onSale } = this.state;
+        const { isOpen, name, id, quantity, price, onSale, type } = this.state;
         const { items } = this.props;
         return (
             <MuiThemeProvider>
@@ -167,6 +181,8 @@ class StorePage extends Component {
                                 <TextField name='name' floatingLabelText='Item Name' hintText='Name' />
                                 <br />
                                 <TextField name='url' floatingLabelText='Image Url' hintText='Url' />
+                                <br />
+                                <TextField name='type' floatingLabelText='Item Type' hintText='Type' />
                                 <br />
                                 <TextField name='id' type='number' floatingLabelText='Item ID' hintText='#' />
                                 <br />
@@ -194,7 +210,7 @@ class StorePage extends Component {
                                         label='Submit'
                                         type='submit'
                                         primary={true}
-                                        disabled={!name || !id || !quantity || !price}
+                                        disabled={!name || !id || !quantity || !price || !type}
                                         onTouchTap={this.toggleModal}
                                     />
                             </form>
@@ -203,6 +219,11 @@ class StorePage extends Component {
                     <PageWrapper>
                         <HeaderWrapper>
                             <PageTitle>Current Store Items</PageTitle>
+                            <FlatButton
+                                onClick={this.handleRefresh}
+                                primary={true}
+                                label='Refresh'
+                            />
                             <CustomFAB
                                 onClick={this.toggleModal}
                                 mini={true}
@@ -230,8 +251,11 @@ export default connect(
     },
     dispatch => {
         return {
-            onSubmit: (name, id, quantity, url, price, onSale, salePercent) => {
-                dispatch(addStoreItem(name, id, quantity, url, price, onSale, salePercent));
+            onSubmit: (name, id, quantity, url, price, onSale, salePercent, type) => {
+                dispatch(addNewItemToStore(name, id, quantity, url, price, onSale, salePercent, type));
+            },
+            onRefresh: () => {
+                dispatch(getAllStoreItems());
             }
         };
     })(StorePage);

@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `;
 
 const MapWrapper = styled.div`
-    width: 600px;
+    width: 800px;
     height: 600px;
     margin: auto;
 `;
@@ -40,7 +40,9 @@ class CartMap extends Component {
                     center: {
                         lat: pos.coords.latitude,
                         lng: pos.coords.longitude
-                    }
+                    },
+                    zoom: 18,
+                    err: false
                 };
             });
         }
@@ -81,7 +83,7 @@ class CartMap extends Component {
 
     render() {
         const { center, zoom, curCart, err } = this.state;
-        const { carts } = this.props;
+        let { carts } = this.props;
         return (
             <Wrapper>
                 <form onSubmit={this.handleSubmit} onChange={this.handleChange}>
@@ -99,6 +101,7 @@ class CartMap extends Component {
                                 key={cart.id}
                                 lat={cart.lat}
                                 lng={cart.lng}
+                                {...cart}
                             />;
                         })}
                     </GoogleMap>
@@ -113,6 +116,16 @@ class CartMap extends Component {
         );
     }
 }
+
+CartMap.defaultProps = {
+    carts: [
+        {
+            id: 0,
+            lat: -123.245122,
+            lng: 49.262400
+        }
+    ]
+};
 
 export default connect(
     state => {

@@ -3,7 +3,7 @@ import ShoppingCart from 'material-ui/svg-icons/maps/local-grocery-store';
 
 const Cart = () => {
     return (
-        <ShoppingCart />
+        <ShoppingCart style={{color: 'red'}} />
     );
 };
 

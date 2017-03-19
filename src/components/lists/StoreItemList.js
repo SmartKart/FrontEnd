@@ -3,9 +3,7 @@ import styled from 'styled-components';
 import StoreItem from '../misc/StoreItem';
 
 const Wrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
+    overflow-y: scroll;
 `;
 
 const StoreItemList = ({ items }) => {

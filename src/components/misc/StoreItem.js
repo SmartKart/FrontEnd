@@ -10,12 +10,13 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 import Snackbar from 'material-ui/Snackbar';
+import Chip from 'material-ui/Chip';
 import { editStoreItem } from '../../actions/storeActions';
 
 const Wrapper = styled.div`
-    display: inline-block;
-    width: 300px;
     text-align: center;
+    display: inline-block;
+    position: relative;
 `;
 
 const Title = styled.h1`
@@ -24,9 +25,13 @@ const Title = styled.h1`
 `;
 
 const CustomPaper = styled(Paper)`
-    width: 100%%;
+    width: 300px;
+    height: 400px;
     padding: 20px;
     margin: 10px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
 `;
 
 const ItemImg = styled.img`
@@ -70,11 +75,16 @@ const CustomToggle = styled(Toggle)`
     }
 `;
 
+const Strike = styled.span`
+    text-decoration: line-through;
+    color: red;
+`;
+
 // name, id, quantity, url, price, onSale, salePercent
 class StoreItem extends Component {
     constructor(props) {
         super(props);
-        const { itemName, itemQuantity, imgUrl, itemPrice, onSale, itemSalePercent } = this.props;
+        const { itemName, itemQuantity, imgUrl, itemPrice, onSale, itemSalePercent, itemType } = this.props;
         this.state = {
             shadow: 1,
             editOpen: false,
@@ -82,9 +92,10 @@ class StoreItem extends Component {
             quantity: itemQuantity,
             url: imgUrl,
             price: itemPrice,
-            onSale: !!onSale,
+            onSale: onSale,
             salePercent: itemSalePercent,
-            edited: false
+            edited: false,
+            type: itemType
         };
 
         this.hover = this.hover.bind(this);
@@ -127,9 +138,15 @@ class StoreItem extends Component {
                 });
                 break;
             }
-            case 'price' :{
+            case 'price': {
                 this.setState({
                     price: e.target.value
+                });
+                break;
+            }
+            case 'type': {
+                this.setState({
+                    type: e.target.value
                 });
                 break;
             }
@@ -165,8 +182,8 @@ class StoreItem extends Component {
     handleSubmit(e) {
         e.preventDefault();
         let { onSubmit, itemId } = this.props;
-        let { name, quantity, url, price, onSale, salePercent } = this.state;
-        onSubmit(name, itemId, quantity, url, price, onSale, salePercent);
+        let { name, quantity, url, price, onSale, salePercent, type } = this.state;
+        onSubmit(name, itemId, quantity, url, price, onSale, salePercent, type);
         this.setState({editOpen: !this.state.editOpen, edited: true});
     }
 
@@ -175,8 +192,8 @@ class StoreItem extends Component {
     }
 
     render() {
-        const { itemName, itemQuantity, imgUrl, itemPrice, onSale, itemSalePercent } = this.props;
-        const { shadow, editOpen, edited } = this.state;
+        const { itemName, itemQuantity, imgUrl, itemPrice, itemSalePercent, itemType } = this.props;
+        const { shadow, editOpen, edited, onSale } = this.state;
         return (
             <Wrapper>
                 <Dialog
@@ -187,6 +204,8 @@ class StoreItem extends Component {
                     <ModalWrapper>
                         <form name='storeEdit' onSubmit={this.handleSubmit} onChange={this.handleChange}>
                             <TextField name='name' floatingLabelText='Item Name' hintText={itemName} />
+                            <br />
+                            <TextField name='type' floatingLabelText='Item Type' hintText='Type' />
                             <br />
                             <TextField name='url' floatingLabelText='Image Url' hintText={imgUrl} />
                             <br />
@@ -226,15 +245,19 @@ class StoreItem extends Component {
                         <ItemNavItem onClick={this.onDelete}><CustomDelete style={{color: '#a8a8a8'}}/></ItemNavItem>
                     </ItemNav>
                     <Title>{itemName}</Title>
-                    <p>{onSale ? `Sale Percent: ${itemSalePercent}` : ''}</p>
+                    <Chip style={{margin: 'auto', marginBottom: '5px'}}>{itemType}</Chip>
                     <ItemImg src={imgUrl} />
-                    <p>Price: ${itemPrice}</p>
+                    <p>Price: {onSale ? <span><Strike>${itemPrice}</Strike> ${itemPrice - (itemPrice * (0.01 * itemSalePercent))}</span>
+                    :
+                    `$${itemPrice}`}
+                    </p>
                     <p>Total Quantity: {itemQuantity}</p>
+                    <p>{onSale ? `Sale Percent: ${itemSalePercent}%` : ''}</p>
                 </CustomPaper>
                 <Snackbar
                     open={edited}
                     message={`Successfully edited ${itemName}`}
-                    autoHideDuration={6000}
+                    autoHideDuration={4000}
                     onRequestClose={this.handleSnackClose}
                 />
             </Wrapper>
@@ -249,8 +272,8 @@ export default connect(
             handleDelete: (itemId) => {
                 dispatch(deleteStoreItem(itemId));
             },
-            onSubmit: (name, id, quantity, url, price, onSale, salePercent) => {
-                dispatch(editStoreItem(name, id, quantity, url, price, onSale, salePercent));
+            onSubmit: (name, id, quantity, url, price, onSale, salePercent, type) => {
+                dispatch(editStoreItem(name, id, quantity, url, price, onSale, salePercent, type));
             }
         };
     }
