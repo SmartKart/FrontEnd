@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { IndexLink, Link } from 'react-router';
+import Store from 'material-ui/svg-icons/action/store';
+import ShoppingCart from 'material-ui/svg-icons/maps/local-grocery-store';
 
 const Wrapper = styled.div`
     position: relative;
@@ -55,8 +57,11 @@ const SideNav = () => {
             <Title>SmartKart Manager</Title>
             <hr />
             <NavList>
-                <li><IndexLink to='/' activeClassName='active'>Store</IndexLink></li>
-                <li><Link to='/carts' activeClassName='active'>Carts</Link></li>
+                <li><IndexLink to='/' activeClassName='active'><Store style={{color: 'currentColor', paddingRight: '1em'}}/>Store</IndexLink></li>
+                <li><Link to='/carts' activeClassName='active'>
+                        <ShoppingCart style={{color: 'currentColor', paddingRight: '1em'}}/>Carts
+                    </Link>
+                </li>
             </NavList>
         </Wrapper>
     );

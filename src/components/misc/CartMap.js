@@ -99,8 +99,12 @@ class CartMap extends Component {
     }
 
     handleRefresh() {
-        const { getCartLocations } = this.props;
+        const {
+            getCartLocations,
+            getCartData
+        } = this.props;
         getCartLocations();
+        getCartData();
     }
 
     handleToggle() {
@@ -117,7 +121,11 @@ class CartMap extends Component {
 
     render() {
         const { center, zoom, cartId, err, isOpen } = this.state;
-        let { carts, cartData } = this.props;
+        let { carts, cartData, getCartLocations } = this.props;
+
+        // setInterval(() => {
+        //     getCartLocations();
+        // }, 5000);
 
         return (
             <Wrapper>
@@ -188,6 +196,8 @@ export default connect(
         return {
             getCartLocations: () => {
                 dispatch(refreshCartLocations());
+            },
+            getCartData: () => {
                 dispatch(getCartData());
             }
         };
