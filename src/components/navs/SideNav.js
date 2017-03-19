@@ -51,7 +51,7 @@ const NavList = styled.ul`
 const SideNav = () => {
     return (
         <Wrapper>
-            <Title>Manager</Title>
+            <Title>SmartKart Manager</Title>
             <hr />
             <NavList>
                 <li><IndexLink to='/' activeClassName='active'>Store</IndexLink></li>

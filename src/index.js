@@ -17,9 +17,9 @@ import { injectGlobal } from 'styled-components';
 import { Router, browserHistory } from 'react-router';
 import routes from './routes';
 // Local Storage
-// import { loadState, saveState } from './utils/localStorage';
+import { loadState, saveState } from './utils/localStorage';
 // Other
-// import throttle from 'lodash/throttle';
+import throttle from 'lodash/throttle';
 
 //----------------------------------------------------------------------------
 // Needed for onTouchTap
@@ -47,7 +47,7 @@ injectGlobal`
 //----------------------------------------------------------------------------
 // Load in cached data from localStorage
 //----------------------------------------------------------------------------
-// const persistedState = loadState();
+const persistedState = loadState();
 
 //----------------------------------------------------------------------------
 // Initiate store
@@ -55,7 +55,7 @@ injectGlobal`
 const loggerMiddleware = createLogger();
 const store = createStore(
     rootReducer,
-    // persistedState,
+    persistedState,
     applyMiddleware(
         thunkMiddleware, // Allows us to dispatch() in actions
         loggerMiddleware // Logs actions for easy debugging (use in dev-mode only)
@@ -69,10 +69,11 @@ console.log(store.getState());
 // Listens for any changes and saves them to localStorage for faster app loads
 // Throttle ensures that we don't write to localStorage more than 1/sec
 //----------------------------------------------------------------------------
-// store.subscribe(throttle(() => {
-//     saveState({
-//     });
-// }, 2000));
+store.subscribe(throttle(() => {
+    saveState({
+        items: store.getState().items
+    });
+}, 2000));
 
 //----------------------------------------------------------------------------
 // Rendered out to DOM

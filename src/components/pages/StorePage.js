@@ -1,30 +1,58 @@
+/*
+    Lol. So long...
+*/
+
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import IconButton from 'material-ui/IconButton';
-import Add from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import StoreItemContainer from '../../containers/StoreItemContainer';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import TextField from 'material-ui/TextField';
-import { ifProp } from 'styled-tools';
+import Toggle from 'material-ui/Toggle';
 import { addStoreItem } from '../../actions/storeActions';
 
 const PageWrapper = styled.div`
     padding: 0 2rem;
-
-    ${ifProp('isOpen', css`
-        z-index: -1;
-    `)}
 `;
 
 const PageTitle = styled.h1`
     text-align: center;
+    display: inline-block;
 `;
 
 const ModalWrapper = styled.div`
     text-align: center;
+`;
+
+const Warning = styled.p`
+    text-align: center;
+
+    & > a {
+        cursor: pointer;
+        color: blue;
+    }
+`;
+
+const CustomToggle = styled(Toggle)`
+    text-align: center;
+
+    & label {
+        width: initial;
+    }
+`;
+
+const HeaderWrapper = styled.div`
+    text-align: center;
+`;
+
+const CustomFAB = styled(FloatingActionButton)`
+    float: right;
+    margin-top: 1em;
+    margin-right: 2em;
 `;
 
 class StorePage extends Component {
@@ -33,8 +61,11 @@ class StorePage extends Component {
         this.state = {
             isOpen: false,
             name: '',
+            url: '',
             id: null,
-            quantity: null
+            quantity: null,
+            price: null,
+            onSale: false
         };
         this.toggleModal = this.toggleModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
@@ -68,32 +99,61 @@ class StorePage extends Component {
                 });
                 break;
             }
+            case 'price' :{
+                this.setState({
+                    price: e.target.value
+                });
+                break;
+            }
             case 'quantity': {
                 this.setState({
                     quantity: e.target.value
                 });
                 break;
             }
+            case 'url': {
+                this.setState({
+                    url: e.target.value
+                });
+                break;
+            }
+            case 'sale': {
+                this.setState({
+                    onSale: !this.state.onSale
+                });
+                break;
+            }
+            case 'salePercent': {
+                this.setState({
+                    salePercent: e.target.value
+                });
+                break;
+            }
             default:
-                console.log('What??');
+                console.warn('What??');
         }
     }
 
     handleSubmit(e) {
         e.preventDefault();
         const { onSubmit } = this.props;
-        const { name, id, quantity } = this.state;
-        onSubmit(name, id, quantity);
+        const { name, id, quantity, url, price, onSale, salePercent } = this.state;
+        onSubmit(name, id, quantity, url, price, onSale, salePercent);
         this.setState({
             isOpen: false,
+            price: null,
+            salePercent: null,
             name: '',
             id: null,
-            quantity: null
+            quantity: null,
+            url: '',
+            onSale: false
         });
     }
 
     render() {
-        const { isOpen, name, id, quantity } = this.state;
+        const { isOpen, name, id, quantity, price, onSale } = this.state;
+        const { items } = this.props;
         return (
             <MuiThemeProvider>
                 <div>
@@ -106,29 +166,63 @@ class StorePage extends Component {
                             <form name='storeAdd' onSubmit={this.handleSubmit} onChange={this.handleChange}>
                                 <TextField name='name' floatingLabelText='Item Name' hintText='Name' />
                                 <br />
-                                <TextField name='id' type='number' floatingLabelText='Item ID' hintText='ID' />
+                                <TextField name='url' floatingLabelText='Image Url' hintText='Url' />
+                                <br />
+                                <TextField name='id' type='number' floatingLabelText='Item ID' hintText='#' />
+                                <br />
+                                <TextField name='price' type='number' floatingLabelText='Price' hintText='$' />
                                 <br />
                                 <TextField name='quantity' type='number' floatingLabelText='Quantity' hintText='#' />
                                 <br />
+                                <CustomToggle
+                                    name='sale'
+                                    label='On Sale'
+                                />
+                                {onSale ?
+                                    <TextField name='salePercent' type='number' floatingLabelText='Percent Off' hintText='%' />
+                                    :
+                                    ''
+                                }
+                                <br />
+
                                     <FlatButton
                                         label='Cancel'
-                                        primary={true}
+                                        secondary={true}
                                         onTouchTap={this.closeModal}
                                     />
                                     <FlatButton
                                         label='Submit'
                                         type='submit'
                                         primary={true}
-                                        disabled={!name || !id || !quantity}
+                                        disabled={!name || !id || !quantity || !price}
                                         onTouchTap={this.toggleModal}
                                     />
                             </form>
                         </ModalWrapper>
                     </Dialog>
-                    <IconButton onClick={this.toggleModal}><Add /></IconButton>
-                    <PageWrapper isOpen={isOpen}>
-                        <PageTitle>Current Store Items</PageTitle>
-                        <StoreItemContainer />
+                    <PageWrapper>
+                        <HeaderWrapper>
+                            <PageTitle>Current Store Items</PageTitle>
+                            {/* <IconButton onClick={this.toggleModal} style={{
+                                backgroundColor: 'green',
+                                borderRadius: '50%'
+                            }}
+                            ><Add style={{
+                                fill: 'white'
+                            }}/></IconButton> */}
+                            <CustomFAB
+                                onClick={this.toggleModal}
+                                mini={true}
+                            >
+                                <ContentAdd />
+                            </CustomFAB>
+                        </HeaderWrapper>
+                        {items.length
+                            ?
+                            <StoreItemContainer />
+                            :
+                            <Warning>No items in store. Click <a onClick={this.toggleModal}>here</a> to add some.</Warning>
+                        }
                     </PageWrapper>
                 </div>
             </MuiThemeProvider>
@@ -137,11 +231,13 @@ class StorePage extends Component {
 }
 
 export default connect(
-    null,
+    state => {
+        return {items: state.items};
+    },
     dispatch => {
         return {
-            onSubmit: (name, id, quantity) => {
-                dispatch(addStoreItem(name, id, quantity));
+            onSubmit: (name, id, quantity, url, price, onSale, salePercent) => {
+                dispatch(addStoreItem(name, id, quantity, url, price, onSale, salePercent));
             }
         };
     })(StorePage);
