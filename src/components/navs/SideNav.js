@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router';
+import { IndexLink, Link } from 'react-router';
 
 const Wrapper = styled.div`
     position: relative;
@@ -11,10 +11,8 @@ const Wrapper = styled.div`
     flex: 0 0 20rem;
     background-color: #525252;
     color: #fff;
-    padding: .25rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
     height: 100%;
+    border-right: 1px solid #ccc;
 `;
 
 const Title = styled.h1`
@@ -25,12 +23,28 @@ const Title = styled.h1`
 const NavList = styled.ul`
     list-style-type: none;
     text-decoration: none;
+    padding-left: 0px;
     display: flex;
     flex-direction: column;
+
+    & > li {
+        width: 100%;
+        height: 2rem;
+        text-align: center;
+        vertical-align: middle;
+    }
 
     & > li > a {
         text-decoration: none;
         color: currentColor;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+
+    & > li > a.active {
+        background-color: #fff;
+        color: #525252;
     }
 `;
 
@@ -38,10 +52,11 @@ const SideNav = () => {
     return (
         <Wrapper>
             <Title>Manager</Title>
+            <hr />
             <NavList>
-                <li><Link to='/'>Store</Link></li>
-                <li><Link to='/carts'>Carts</Link></li>
-                <li><Link to='/analytics'>Analytics</Link></li>
+                <li><IndexLink to='/' activeClassName='active'>Store</IndexLink></li>
+                <li><Link to='/carts' activeClassName='active'>Carts</Link></li>
+                <li><Link to='/analytics' activeClassName='active'>Analytics</Link></li>
             </NavList>
         </Wrapper>
     );

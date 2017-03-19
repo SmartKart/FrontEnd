@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import SideNav from '../navs/SideNav';
-import ContextBar from '../navs/ContextBar';
 import styled from 'styled-components';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 const Wrapper = styled.div`
     height: 100%;
@@ -24,18 +24,19 @@ const Content = styled.div`
     -ms-flex-positive: 1;
     flex-grow: 1;
     overflow: hidden;
-    z-index: -1;
+    z-index: 1;
 `;
 
 const App = ({ children }) => {
     return (
-        <Wrapper>
-            <SideNav />
-            <Content>
-                <ContextBar />
-                {children}
-            </Content>
-        </Wrapper>
+        <MuiThemeProvider>
+            <Wrapper>
+                <SideNav />
+                <Content>
+                    {children}
+                </Content>
+            </Wrapper>
+        </MuiThemeProvider>
     );
 };
 

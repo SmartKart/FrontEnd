@@ -1,0 +1,13 @@
+import { connect } from 'react-redux';
+import StoreItemList from '../components/lists/StoreItemList';
+
+const mapStateToProps = (state) => {
+    return {
+        items: state.allItems
+    };
+};
+
+export default connect(
+    mapStateToProps,
+    null
+)(StoreItemList);
