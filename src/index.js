@@ -23,7 +23,6 @@ import throttle from 'lodash/throttle';
 
 //----------------------------------------------------------------------------
 // Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
 //----------------------------------------------------------------------------
 injectTapEventPlugin();
 
@@ -71,7 +70,9 @@ console.log(store.getState());
 //----------------------------------------------------------------------------
 store.subscribe(throttle(() => {
     saveState({
-        items: store.getState().items
+        items: store.getState().items,
+        curCart: store.getState().curCart,
+        carts: store.getState.carts
     });
 }, 2000));
 

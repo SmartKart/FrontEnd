@@ -1,4 +1,3 @@
-// name, id, quantity, url, price, onSale, salePercent
 const storeReducer = (state=[], action) => {
     switch (action.type) {
         case 'ADD_STORE_ITEM': {
@@ -27,6 +26,7 @@ const storeReducer = (state=[], action) => {
             return [
                 {
                     itemName: action.itemName,
+                    itemId: action.itemId,
                     itemQuantity: action.itemQuantity,
                     imgUrl: action.imgUrl,
                     itemPrice: action.itemPrice,

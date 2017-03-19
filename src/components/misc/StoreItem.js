@@ -9,12 +9,12 @@ import Dialog from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
+import Snackbar from 'material-ui/Snackbar';
 import { editStoreItem } from '../../actions/storeActions';
 
 const Wrapper = styled.div`
     display: inline-block;
-    width: 20rem;
-    max-width: 500px;
+    width: 300px;
     text-align: center;
 `;
 
@@ -82,8 +82,9 @@ class StoreItem extends Component {
             quantity: itemQuantity,
             url: imgUrl,
             price: itemPrice,
-            onSale: onSale,
-            salePercent: itemSalePercent
+            onSale: !!onSale,
+            salePercent: itemSalePercent,
+            edited: false
         };
 
         this.hover = this.hover.bind(this);
@@ -92,6 +93,7 @@ class StoreItem extends Component {
         this.toggleOpen = this.toggleOpen.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleSnackClose = this.handleSnackClose.bind(this);
     }
 
 
@@ -114,9 +116,7 @@ class StoreItem extends Component {
     }
 
     toggleOpen() {
-        let { itemId } = this.props;
         this.setState({editOpen: !this.state.editOpen});
-        console.log(itemId);
     }
 
     handleChange(e) {
@@ -167,12 +167,16 @@ class StoreItem extends Component {
         let { onSubmit, itemId } = this.props;
         let { name, quantity, url, price, onSale, salePercent } = this.state;
         onSubmit(name, itemId, quantity, url, price, onSale, salePercent);
-        this.setState({editOpen: !this.state.editOpen});
+        this.setState({editOpen: !this.state.editOpen, edited: true});
+    }
+
+    handleSnackClose() {
+        this.setState({edited: false});
     }
 
     render() {
         const { itemName, itemQuantity, imgUrl, itemPrice, onSale, itemSalePercent } = this.props;
-        const { shadow, editOpen } = this.state;
+        const { shadow, editOpen, edited } = this.state;
         return (
             <Wrapper>
                 <Dialog
@@ -193,6 +197,7 @@ class StoreItem extends Component {
                             <CustomToggle
                                 name='sale'
                                 label='On Sale'
+                                toggled={onSale}
                             />
                             {onSale ?
                                 <TextField name='salePercent' type='number' floatingLabelText='Percent Off' hintText={`${itemSalePercent}%`} />
@@ -226,6 +231,12 @@ class StoreItem extends Component {
                     <p>Price: ${itemPrice}</p>
                     <p>Total Quantity: {itemQuantity}</p>
                 </CustomPaper>
+                <Snackbar
+                    open={edited}
+                    message={`Successfully edited ${itemName}`}
+                    autoHideDuration={6000}
+                    onRequestClose={this.handleSnackClose}
+                />
             </Wrapper>
         );
     }
