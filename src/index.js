@@ -71,8 +71,8 @@ console.log(store.getState());
 store.subscribe(throttle(() => {
     saveState({
         items: store.getState().items,
-        curCart: store.getState().curCart,
-        carts: store.getState.carts
+        cartData: store.getState().cartData,
+        carts: store.getState().carts
     });
 }, 2000));
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { deleteStoreItem } from '../../actions/storeActions';
 import styled from 'styled-components';
 import Paper from 'material-ui/Paper';
 import Delete from 'material-ui/svg-icons/action/delete';
@@ -11,7 +10,7 @@ import FlatButton from 'material-ui/FlatButton';
 import Toggle from 'material-ui/Toggle';
 import Snackbar from 'material-ui/Snackbar';
 import Chip from 'material-ui/Chip';
-import { editStoreItem } from '../../actions/storeActions';
+import { updateStoreItem, deleteSelectedStoreItem } from '../../actions/storeActions';
 
 const Wrapper = styled.div`
     text-align: center;
@@ -192,8 +191,8 @@ class StoreItem extends Component {
     }
 
     render() {
-        const { itemName, itemQuantity, imgUrl, itemPrice, itemSalePercent, itemType } = this.props;
-        const { shadow, editOpen, edited, onSale } = this.state;
+        let { itemName, itemQuantity, imgUrl, itemPrice, itemSalePercent, itemType } = this.props;
+        const { shadow, editOpen, edited, onSale, name, quantity, url, price, salePercent, type } = this.state;
         return (
             <Wrapper>
                 <Dialog
@@ -203,15 +202,15 @@ class StoreItem extends Component {
                 >
                     <ModalWrapper>
                         <form name='storeEdit' onSubmit={this.handleSubmit} onChange={this.handleChange}>
-                            <TextField name='name' floatingLabelText='Item Name' hintText={itemName} />
+                            <TextField name='name' floatingLabelText='Item Name' hintText={itemName} value={name} />
                             <br />
-                            <TextField name='type' floatingLabelText='Item Type' hintText='Type' />
+                            <TextField name='type' floatingLabelText='Item Type' hintText='Type' value={type} />
                             <br />
-                            <TextField name='url' floatingLabelText='Image Url' hintText={imgUrl} />
+                            <TextField name='url' floatingLabelText='Image Url' hintText={imgUrl} value={url}/>
                             <br />
-                            <TextField name='price' type='number' floatingLabelText='Price' hintText={`$${itemPrice}`} />
+                            <TextField name='price' type='number' floatingLabelText='Price' hintText={`$${itemPrice}`} value={price} />
                             <br />
-                            <TextField name='quantity' type='number' floatingLabelText='Quantity' hintText={itemQuantity} />
+                            <TextField name='quantity' type='number' floatingLabelText='Quantity' hintText={itemQuantity} value={quantity} />
                             <br />
                             <CustomToggle
                                 name='sale'
@@ -219,7 +218,7 @@ class StoreItem extends Component {
                                 toggled={onSale}
                             />
                             {onSale ?
-                                <TextField name='salePercent' type='number' floatingLabelText='Percent Off' hintText={`${itemSalePercent}%`} />
+                                <TextField name='salePercent' type='number' floatingLabelText='Percent Off' hintText={`${itemSalePercent}%`} value={salePercent} />
                                 :
                                 ''
                             }
@@ -252,7 +251,7 @@ class StoreItem extends Component {
                     `$${itemPrice}`}
                     </p>
                     <p>Total Quantity: {itemQuantity}</p>
-                    <p>{onSale ? `Sale Percent: ${itemSalePercent}%` : ''}</p>
+                    <p style={{color: '#c3c3c3'}}>{onSale ? `Sale: ${itemSalePercent}% off` : ''}</p>
                 </CustomPaper>
                 <Snackbar
                     open={edited}
@@ -270,10 +269,10 @@ export default connect(
     dispatch => {
         return {
             handleDelete: (itemId) => {
-                dispatch(deleteStoreItem(itemId));
+                dispatch(deleteSelectedStoreItem(itemId));
             },
             onSubmit: (name, id, quantity, url, price, onSale, salePercent, type) => {
-                dispatch(editStoreItem(name, id, quantity, url, price, onSale, salePercent, type));
+                dispatch(updateStoreItem(name, id, quantity, url, price, onSale, salePercent, type));
             }
         };
     }

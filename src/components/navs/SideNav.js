@@ -5,10 +5,11 @@ import { IndexLink, Link } from 'react-router';
 const Wrapper = styled.div`
     position: relative;
     width: 15rem;
-    max-width: 200px;
+    max-width: 225px;
     -ms-flex: 0 0 15rem;
     -webkit-flex: 0 0 15rem;
     flex: 0 0 20rem;
+    align-items: center;
     background-color: #525252;
     color: #fff;
     height: 100%;
@@ -56,7 +57,6 @@ const SideNav = () => {
             <NavList>
                 <li><IndexLink to='/' activeClassName='active'>Store</IndexLink></li>
                 <li><Link to='/carts' activeClassName='active'>Carts</Link></li>
-                <li><Link to='/analytics' activeClassName='active'>Analytics</Link></li>
             </NavList>
         </Wrapper>
     );

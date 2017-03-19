@@ -58,9 +58,15 @@ const CustomFAB = styled(FloatingActionButton)`
     margin-right: 2em;
 `;
 
+const ButtonWrapper = styled.div`
+    float: right;
+    display: inline-block;
+`;
+
 class StorePage extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
             isOpen: false,
             name: '',
@@ -69,13 +75,12 @@ class StorePage extends Component {
             quantity: null,
             price: null,
             onSale: false,
-            type: ''
+            type: '',
         };
         this.toggleModal = this.toggleModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleSelectChange = this.handleSelectChange.bind(this);
         this.handleRefresh = this.handleRefresh.bind(this);
     }
 
@@ -146,13 +151,6 @@ class StorePage extends Component {
         }
     }
 
-    handleSelectChange(e, i, value) {
-        console.log('select');
-        this.setState({
-            type: value
-        });
-    }
-
     handleSubmit(e) {
         e.preventDefault();
         const { onSubmit } = this.props;
@@ -200,7 +198,6 @@ class StorePage extends Component {
                                     ''
                                 }
                                 <br />
-
                                     <FlatButton
                                         label='Cancel'
                                         secondary={true}
@@ -219,18 +216,20 @@ class StorePage extends Component {
                     <PageWrapper>
                         <HeaderWrapper>
                             <PageTitle>Current Store Items</PageTitle>
-                            <FlatButton
-                                onClick={this.handleRefresh}
-                                primary={true}
-                                label='Refresh'
-                            />
-                            <CustomFAB
-                                onClick={this.toggleModal}
-                                mini={true}
-                                backgroundColor='green'
-                            >
-                                <ContentAdd />
-                            </CustomFAB>
+                            <ButtonWrapper>
+                                <CustomFAB
+                                    onClick={this.toggleModal}
+                                    mini={true}
+                                    backgroundColor='green'
+                                >
+                                    <ContentAdd />
+                                </CustomFAB>
+                                <FlatButton
+                                    onClick={this.handleRefresh}
+                                    label='Refresh'
+                                    style={{marginTop: '1em'}}
+                                />
+                            </ButtonWrapper>
                         </HeaderWrapper>
                         {items.length
                             ?
