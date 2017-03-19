@@ -62,7 +62,7 @@ const store = createStore(
     )
 );
 
-// console.log(store.getState());
+console.log(store.getState());
 
 //----------------------------------------------------------------------------
 // Cache data here!

@@ -22,24 +22,4 @@ StoreItemList.propTypes = {
     items: PropTypes.array
 };
 
-StoreItemList.defaultProps = {
-    items: [
-        {
-            itemName: 'coke',
-            itemId: 0,
-            itemQuantity: 25
-        },
-        {
-            itemName: 'chips',
-            itemId: 1,
-            itemQuantity: 15
-        },
-        {
-            itemName: 'computers',
-            itemId: 2,
-            itemQuantity: 45
-        }
-    ]
-};
-
 export default StoreItemList;
