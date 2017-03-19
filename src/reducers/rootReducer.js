@@ -1,10 +1,8 @@
-// import { combineReducers } from 'redux';
+import { combineReducers } from 'redux';
+import loginReducer from './locationReducer';
 
-const rootReducer = (state='', action) => {
-    switch (action.type) {
-        default:
-            return state;
-    }
-};
+const rootReducer = combineReducers({
+    loginReducer
+});
 
 export default rootReducer;

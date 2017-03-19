@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // Material shit
 import injectTapEventPlugin from 'react-tap-event-plugin';
-// Redux Shit
+// Redux shit
 import { Provider } from 'react-redux';
 import  { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
@@ -13,12 +13,13 @@ import createLogger from 'redux-logger';
 import rootReducer from './reducers/rootReducer';
 // Styles
 import { injectGlobal } from 'styled-components';
-// import routes from './routes';
+// React Router shit
+import { Router, browserHistory } from 'react-router';
+import routes from './routes';
 // Local Storage
 // import { loadState, saveState } from './utils/localStorage';
 // Other
 // import throttle from 'lodash/throttle';
-import App from './components/pages/App';
 
 //----------------------------------------------------------------------------
 // Needed for onTouchTap
@@ -78,7 +79,7 @@ const store = createStore(
 //----------------------------------------------------------------------------
 ReactDOM.render(
     <Provider store={store}>
-        <App />
+        <Router history={browserHistory} routes={routes} />
     </Provider>,
     document.getElementById('root')
 );

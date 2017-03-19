@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router';
 
 const Wrapper = styled.div`
     position: relative;
@@ -16,10 +17,32 @@ const Wrapper = styled.div`
     height: 100%;
 `;
 
+const Title = styled.h1`
+    text-align: center;
+    font-size: 1.5rem;
+`;
+
+const NavList = styled.ul`
+    list-style-type: none;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+
+    & > li > a {
+        text-decoration: none;
+        color: currentColor;
+    }
+`;
+
 const SideNav = () => {
     return (
         <Wrapper>
-            <h1>SideNav</h1>
+            <Title>Manager</Title>
+            <NavList>
+                <li><Link to='/'>Store</Link></li>
+                <li><Link to='/carts'>Carts</Link></li>
+                <li><Link to='/analytics'>Analytics</Link></li>
+            </NavList>
         </Wrapper>
     );
 };

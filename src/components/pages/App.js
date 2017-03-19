@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import SideNav from '../navs/SideNav';
 import ContextBar from '../navs/ContextBar';
 import styled from 'styled-components';
@@ -27,16 +27,20 @@ const Content = styled.div`
     z-index: -1;
 `;
 
-const App = () => {
+const App = ({ children }) => {
     return (
         <Wrapper>
             <SideNav />
             <Content>
                 <ContextBar />
-                <h1>Hello, world!</h1>
+                {children}
             </Content>
         </Wrapper>
     );
+};
+
+App.PropTypes = {
+    children: PropTypes.any
 };
 
 export default App;
