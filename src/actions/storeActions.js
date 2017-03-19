@@ -19,3 +19,17 @@ export const deleteStoreItem = (itemId) => {
         itemId
     };
 };
+
+// Edits an item that is in the store
+export const editStoreItem = (itemName, itemId, itemQuantity, imgUrl, itemPrice, onSale, itemSalePercent) => {
+    return {
+        type: 'EDIT_STORE_ITEM',
+        itemName,
+        itemId,
+        itemQuantity,
+        imgUrl,
+        itemPrice,
+        onSale,
+        itemSalePercent
+    };
+};

@@ -203,16 +203,10 @@ class StorePage extends Component {
                     <PageWrapper>
                         <HeaderWrapper>
                             <PageTitle>Current Store Items</PageTitle>
-                            {/* <IconButton onClick={this.toggleModal} style={{
-                                backgroundColor: 'green',
-                                borderRadius: '50%'
-                            }}
-                            ><Add style={{
-                                fill: 'white'
-                            }}/></IconButton> */}
                             <CustomFAB
                                 onClick={this.toggleModal}
                                 mini={true}
+                                backgroundColor='green'
                             >
                                 <ContentAdd />
                             </CustomFAB>

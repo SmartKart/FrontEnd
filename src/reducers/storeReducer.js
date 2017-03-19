@@ -1,7 +1,7 @@
 // name, id, quantity, url, price, onSale, salePercent
 const storeReducer = (state=[], action) => {
     switch (action.type) {
-        case 'ADD_STORE_ITEM':
+        case 'ADD_STORE_ITEM': {
             return [
                 {
                     itemName: action.itemName,
@@ -14,10 +14,28 @@ const storeReducer = (state=[], action) => {
                 },
                 ...state
             ];
-        case 'DELETE_STORE_ITEM':
+        }
+        case 'DELETE_STORE_ITEM': {
             return state.filter((item) => {
                 return item.itemId !== action.itemId;
             });
+        }
+        case 'EDIT_STORE_ITEM': {
+            const oldState = state.filter((item) => {
+                return item.itemId !== action.itemId;
+            });
+            return [
+                {
+                    itemName: action.itemName,
+                    itemQuantity: action.itemQuantity,
+                    imgUrl: action.imgUrl,
+                    itemPrice: action.itemPrice,
+                    onSale: action.onSale,
+                    itemSalePercent: action.itemSalePercent
+                },
+                ...oldState
+            ];
+        }
         default:
             return state;
     }
