@@ -9,12 +9,6 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
 import Dialog from 'material-ui/Dialog';
-// import MojioClientLite from 'mojio-client-lite';
-
-// const mojioConfig = {
-//     application: MOJIO_ID
-// };
-// const mojio = new MojioClientLite(mojioConfig);
 
 const Wrapper = styled.div`
     text-align: center;
@@ -27,7 +21,6 @@ const MapWrapper = styled.div`
 `;
 
 const ModalWrapper = styled.div`
-
 `;
 
 const ItemSpan = styled.span`
@@ -81,14 +74,14 @@ class CartMap extends Component {
         const { carts } = this.props;
         const { cartId } = this.state;
         let cart = carts.filter((cCart) => {
-            return parseInt(cCart.id) === parseInt(cartId);
+            return parseFloat(cCart.id) === parseFloat(cartId);
         });
         if (cart[0]) {
             cart = cart[0];
             this.setState({
                 center: {
-                    lat: cart.lat,
-                    lng: cart.lng
+                    lat: parseFloat(cart.lat),
+                    lng: parseFloat(cart.lng)
                 },
                 isOpen: true
             });
@@ -167,8 +160,8 @@ class CartMap extends Component {
                         {carts.map((cart) => {
                             return <Cart
                                 key={cart.id}
-                                lat={cart.lat}
-                                lng={cart.lng}
+                                lat={parseFloat(cart.lat)}
+                                lng={parseFloat(cart.lng)}
                             />;
                         })}
                     </GoogleMap>
