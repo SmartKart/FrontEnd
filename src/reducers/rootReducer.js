@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import loginReducer from './locationReducer';
+import storeReducer from './storeReducer';
 
 const rootReducer = combineReducers({
-    loginReducer
+    items: storeReducer
 });
 
 export default rootReducer;
